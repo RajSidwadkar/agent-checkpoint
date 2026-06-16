@@ -18,9 +18,7 @@ class ConfidenceRange:
         if not (0.0 <= self.max <= 1.0):
             raise ValueError(f"max must be between 0.0 and 1.0; got {self.max}")
         if self.min > self.max:
-            raise ValueError(
-                f"min ({self.min}) cannot be greater than max ({self.max})"
-            )
+            raise ValueError(f"min ({self.min}) cannot be greater than max ({self.max})")
 
 
 @dataclass
