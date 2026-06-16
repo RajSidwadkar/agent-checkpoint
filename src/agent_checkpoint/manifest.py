@@ -18,7 +18,9 @@ class ConfidenceRange:
         if not (0.0 <= self.max <= 1.0):
             raise ValueError(f"max must be between 0.0 and 1.0; got {self.max}")
         if self.min > self.max:
-            raise ValueError(f"min ({self.min}) cannot be greater than max ({self.max})")
+            raise ValueError(
+                f"min ({self.min}) cannot be greater than max ({self.max})"
+            )
 
 
 @dataclass
@@ -49,7 +51,11 @@ def parse_manifest(data: Union[str, Dict[str, Any]]) -> Optional[AgentManifest]:
             return None
 
         # Check required fields
-        if "ac_version" not in raw_dict or "agent_id" not in raw_dict or "capabilities" not in raw_dict:
+        if (
+            "ac_version" not in raw_dict
+            or "agent_id" not in raw_dict
+            or "capabilities" not in raw_dict
+        ):
             return None
 
         conf_range = None
@@ -57,7 +63,8 @@ def parse_manifest(data: Union[str, Dict[str, Any]]) -> Optional[AgentManifest]:
         if isinstance(raw_conf, dict):
             try:
                 conf_range = ConfidenceRange(
-                    min=float(raw_conf.get("min", 0.0)), max=float(raw_conf.get("max", 1.0))
+                    min=float(raw_conf.get("min", 0.0)),
+                    max=float(raw_conf.get("max", 1.0)),
                 )
             except (ValueError, TypeError):
                 # If confidence range is invalid, we continue without it
