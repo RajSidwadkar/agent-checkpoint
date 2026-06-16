@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+dist/
+build/
+*.egg-info/
+
+.coverage
+htmlcov/
+
+.vscode/*
+!.vscode/extensions.json
+
+.DS_Store
+Thumbs.db
