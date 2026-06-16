@@ -61,9 +61,7 @@ def second_agent_run(checkpoint_json):
         return
 
     cp = result.checkpoint
-    print(
-        f"Resuming task. Completed: {cp.completed_steps}. Remaining: {cp.remaining_steps}."
-    )
+    print(f"Resuming task. Completed: {cp.completed_steps}. Remaining: {cp.remaining_steps}.")
 
     # Link a new checkpoint to the previous one
     # resume_from handles the id linking and step copying automatically
