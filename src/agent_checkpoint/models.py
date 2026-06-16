@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 
 class CheckpointStatus(StrEnum):
@@ -20,6 +20,23 @@ class RetryStrategy(StrEnum):
     RESUME = "resume"
     RESTART = "restart"
     ESCALATE = "escalate"
+
+
+class TrustTier(StrEnum):
+    """Trust levels for context values as defined in SPEC.md."""
+
+    SYSTEM = "system"
+    AGENT = "agent"
+    USER = "user"
+    VERIFIED = "verified"
+
+
+@dataclass(frozen=True)
+class TrustedValue:
+    """A value annotated with a trust tier."""
+
+    value: Any
+    trust: TrustTier
 
 
 @dataclass(frozen=True)
@@ -49,7 +66,7 @@ class Checkpoint:
     confidence: Optional[float] = None
     retry_strategy: Optional[RetryStrategy] = None
     executor_hint: Optional[str] = None
-    context_snapshot: Optional[Dict[str, object]] = None
+    context_snapshot: Optional[Dict[str, Union[TrustedValue, object]]] = None
     parent_checkpoint_id: Optional[str] = None
 
     def __post_init__(self) -> None:
@@ -69,4 +86,4 @@ class Checkpoint:
                 )
 
 
-__all__ = ["CheckpointStatus", "RetryStrategy", "Checkpoint"]
+__all__ = ["CheckpointStatus", "RetryStrategy", "Checkpoint", "TrustTier", "TrustedValue"]

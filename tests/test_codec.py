@@ -3,7 +3,7 @@ import json
 import pytest
 
 from agent_checkpoint.codec import emit, emit_json, parse
-from agent_checkpoint.models import Checkpoint, CheckpointStatus
+from agent_checkpoint.models import Checkpoint, CheckpointStatus, TrustedValue, TrustTier
 
 
 @pytest.fixture
@@ -106,3 +106,54 @@ def test_round_trip(VALID_DICT):
 
     assert second_parse.ok is True
     assert second_parse.checkpoint == first_parse.checkpoint
+
+
+def test_trust_tiers_deserialization(VALID_DICT):
+    data = VALID_DICT.copy()
+    data["context_snapshot"] = {
+        "user_request": {"value": "summarise", "trust": "user"},
+        "system_id": "machine-1",
+    }
+    result = parse(data)
+    assert result.ok is True
+    snapshot = result.checkpoint.context_snapshot
+    assert isinstance(snapshot["user_request"], TrustedValue)
+    assert snapshot["user_request"].value == "summarise"
+    assert snapshot["user_request"].trust == TrustTier.USER
+    assert snapshot["system_id"] == "machine-1"
+
+
+def test_trust_tiers_serialization(VALID_DICT):
+    checkpoint = Checkpoint(
+        **{k: v for k, v in VALID_DICT.items() if k != "status" and k != "retry_strategy"},
+        status=CheckpointStatus.PARTIAL,
+        context_snapshot={
+            "user_request": TrustedValue(value="summarise", trust=TrustTier.USER),
+            "system_id": "machine-1",
+        },
+    )
+    emitted = emit(checkpoint)
+    snapshot = emitted["context_snapshot"]
+    assert snapshot["user_request"] == {"value": "summarise", "trust": "user"}
+    assert snapshot["system_id"] == "machine-1"
+
+
+def test_trust_tiers_round_trip(VALID_DICT):
+    data = VALID_DICT.copy()
+    data["context_snapshot"] = {
+        "user_request": {"value": "summarise", "trust": "user"},
+        "system_id": "machine-1",
+    }
+    result = parse(data)
+    emitted = emit(result.checkpoint)
+    assert emitted["context_snapshot"] == data["context_snapshot"]
+
+
+def test_receiver_compatibility(VALID_DICT):
+    # Proves that a receiver reading ["value"] directly still gets the data
+    data = VALID_DICT.copy()
+    data["context_snapshot"] = {"user_request": {"value": "summarise", "trust": "user"}}
+    # Even after parsing and re-emitting, the structure is preserved
+    result = parse(data)
+    emitted = emit(result.checkpoint)
+    assert emitted["context_snapshot"]["user_request"]["value"] == "summarise"

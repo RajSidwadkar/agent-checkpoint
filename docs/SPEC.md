@@ -64,3 +64,23 @@ A JSON object with the following fields:
 
 ## 6. Versioning
 `ac_version` follows semver. Receivers must be liberal and ignore unknown fields. Senders must not remove required fields across minor/patch versions.
+
+## 7. Trust Tiers (optional)
+`context_snapshot` values may optionally include trust levels. Instead of raw strings/objects, a field can use an object with `value` and `trust`.
+
+```json
+"context_snapshot": {
+  "user_request": { "value": "summarise this doc", "trust": "user" }
+}
+```
+
+### Trust Tier Values
+- `system`: Set by agent runtime, not influenced by user input.
+- `agent`: Produced by a prior agent; not yet human-verified.
+- `user`: Raw user input; treat as untrusted.
+- `verified`: Checked by a human or a verification agent.
+
+### Rules
+- **Optional**: Receivers that do not understand tiers ignore `trust` and read `value` directly.
+- **Self-reported**: Tiers are advisory labels with no cryptographic proof.
+- **Scope**: Signing and verification protocols are out of scope for v0.1.
