@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-checkpoint.dev/schema/0.1.0.json",
+  "title": "Agent-Checkpoint",
+  "description": "Schema for the agent-checkpoint format v0.1.0",
+  "type": "object",
+  "required": [
+    "ac_version",
+    "checkpoint_id",
+    "task_id",
+    "agent_id",
+    "emitted_at",
+    "status",
+    "task_summary"
+  ],
+  "properties": {
+    "ac_version": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "checkpoint_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "agent_id": {
+      "type": "string"
+    },
+    "emitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["partial", "failed", "paused", "completed"]
+    },
+    "task_summary": {
+      "type": "string"
+    },
+    "completed_steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "remaining_steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "partial_output": {
+      "type": "object"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "retry_strategy": {
+      "type": "string",
+      "enum": ["resume", "restart", "escalate"]
+    },
+    "executor_hint": {
+      "oneOf": [
+        { "enum": ["same", "any"] },
+        { "type": "string", "pattern": "^capability:.+" }
+      ]
+    },
+    "context_snapshot": {
+      "type": "object"
+    },
+    "parent_checkpoint_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    }
+  },
+  "additionalProperties": true
+}

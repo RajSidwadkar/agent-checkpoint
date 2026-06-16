@@ -30,7 +30,7 @@ class InMemoryStorage(Storage):
         self._checkpoints: Dict[str, Checkpoint] = {}
 
     def save(self, checkpoint: Checkpoint) -> None:
-        self._checkpoints[checkpoint.id] = checkpoint
+        self._checkpoints[checkpoint.checkpoint_id] = checkpoint
 
     def load(self, checkpoint_id: str) -> Optional[Checkpoint]:
         return self._checkpoints.get(checkpoint_id)
