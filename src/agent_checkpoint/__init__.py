@@ -1,6 +1,7 @@
 from .codec import ParseResult, emit, emit_json, parse
 from .factory import new_checkpoint, resume_from
 from .manager import CheckpointManager
+from .manifest import AgentManifest, emit_manifest, parse_manifest
 from .models import Checkpoint, CheckpointStatus, RetryStrategy, TrustedValue, TrustTier
 from .storage import InMemoryStorage, Storage
 from .validator import ValidationError
@@ -23,4 +24,7 @@ __all__ = [
     "CheckpointManager",
     "Storage",
     "InMemoryStorage",
+    "AgentManifest",
+    "parse_manifest",
+    "emit_manifest",
 ]
