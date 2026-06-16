@@ -1,0 +1,40 @@
+{
+  "name": "agent-checkpoint",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Never lose work when an agent fails (TypeScript port).",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.3.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
+  },
+  "overrides": {
+    "esbuild": "latest"
+  }
+}
