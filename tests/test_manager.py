@@ -1,4 +1,4 @@
-from agent_checkpoint import CheckpointManager, InMemoryStorage
+from agent_checkpoint import CheckpointManager, InMemoryStorage, emit
 from agent_checkpoint.models import CheckpointStatus, RetryStrategy
 
 
@@ -29,7 +29,7 @@ def test_checkpoint_lifecycle():
     assert retrieved == checkpoint
 
     # Test dictionary conversion for JSON compatibility
-    d = checkpoint.to_dict()
+    d = emit(checkpoint)
     assert d["ac_version"] == "0.1.0"
     assert d["status"] == "partial"
     assert d["retry_strategy"] == "resume"

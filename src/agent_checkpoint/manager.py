@@ -1,3 +1,5 @@
+import uuid
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from .models import Checkpoint, CheckpointStatus, RetryStrategy
@@ -28,10 +30,13 @@ class CheckpointManager:
     ) -> Checkpoint:
         """Creates and saves a new checkpoint following the spec."""
         checkpoint = Checkpoint(
+            ac_version="0.1.0",
+            checkpoint_id=str(uuid.uuid4()),
             task_id=task_id,
             agent_id=agent_id,
-            task_summary=task_summary,
+            emitted_at=datetime.now(timezone.utc).isoformat(),
             status=status,
+            task_summary=task_summary,
             completed_steps=completed_steps or [],
             remaining_steps=remaining_steps or [],
             partial_output=partial_output or {},
