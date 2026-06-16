@@ -2,14 +2,16 @@
 # No dependencies beyond agent-checkpoint
 
 from dataclasses import replace
+
 from agent_checkpoint import (
-    new_checkpoint,
-    resume_from,
-    parse,
-    emit_json,
     CheckpointStatus,
-    RetryStrategy
+    RetryStrategy,
+    emit_json,
+    new_checkpoint,
+    parse,
+    resume_from,
 )
+
 
 def first_agent_run():
     print("--- Agent 1: Starting Task ---")
